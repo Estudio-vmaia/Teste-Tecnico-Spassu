@@ -49,7 +49,8 @@ function executarQuery($pdo, $sql, $params = []) {
         return $stmt;
     } catch (PDOException $e) {
         error_log("Erro na query: " . $e->getMessage() . " SQL: " . $sql);
-        throw new Exception("Erro na operação do banco de dados.");
+        // Exibe mensagem genérica + erro real para o usuário
+        throw new Exception("Erro na operação do banco de dados. Detalhes: " . $e->getMessage());
     }
 }
 
