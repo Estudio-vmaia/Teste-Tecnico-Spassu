@@ -18,6 +18,10 @@ if ($_POST) {
                 throw new Exception("O nome do autor é obrigatório.");
             }
             
+            if (strlen(trim($nome)) < 2) {
+                throw new Exception("Nome do autor deve ter pelo menos 2 caracteres.");
+            }
+            
             if (strlen($nome) > 40) {
                 throw new Exception("O nome do autor deve ter no máximo 40 caracteres.");
             }
@@ -42,6 +46,10 @@ if ($_POST) {
             // Validações (mesmas do inserir)
             if (empty($nome)) {
                 throw new Exception("O nome do autor é obrigatório.");
+            }
+            
+            if (strlen(trim($nome)) < 2) {
+                throw new Exception("Nome do autor deve ter pelo menos 2 caracteres.");
             }
             
             if (strlen($nome) > 40) {
@@ -144,10 +152,20 @@ if (isset($_GET['editar'])) {
     <div class="container my-4">
         <!-- Mensagens -->
         <?php if ($mensagem): ?>
-            <div class="alert alert-<?= $tipo_mensagem ?> alert-dismissible fade show" role="alert">
+            <div class="alert alert-<?= $tipo_mensagem ?> alert-dismissible fade show" role="alert" id="mensagem-alert">
                 <?= htmlspecialchars($mensagem) ?>
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
+            <script>
+                // Auto-hide da mensagem após 5 segundos
+                setTimeout(function() {
+                    const alert = document.getElementById('mensagem-alert');
+                    if (alert) {
+                        const bsAlert = new bootstrap.Alert(alert);
+                        bsAlert.close();
+                    }
+                }, 5000);
+            </script>
         <?php endif; ?>
 
         <div class="row">
