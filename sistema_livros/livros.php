@@ -4,10 +4,29 @@ require_once 'conn.php';
 // Variáveis para mensagens
 $mensagem = '';
 $tipo_mensagem = '';
+$campo_com_erro = ''; // Para identificar qual campo tem erro
+
+// Variáveis para persistir dados do formulário em caso de erro
+$dados_formulario = [
+    'titulo' => '',
+    'editora' => '',
+    'edicao' => '1',
+    'ano_publicacao' => '',
+    'valor' => ''
+];
 
 // Processar formulário
 if ($_POST) {
     $acao = $_POST['acao'] ?? '';
+    
+    // Capturar dados do formulário para persistência
+    $dados_formulario = [
+        'titulo' => $_POST['titulo'] ?? '',
+        'editora' => $_POST['editora'] ?? '',
+        'edicao' => $_POST['edicao'] ?? '1',
+        'ano_publicacao' => $_POST['ano_publicacao'] ?? '',
+        'valor' => $_POST['valor'] ?? ''
+    ];
     
     try {
         if ($acao === 'inserir') {
@@ -18,23 +37,38 @@ if ($_POST) {
             $valor = str_replace(',', '.', str_replace('.', '', $_POST['valor']));
             
             // Validações
-            if (empty($titulo) || empty($editora) || empty($ano_publicacao)) {
+            if (empty($titulo)) {
+                $campo_com_erro = 'titulo';
+                throw new Exception("Todos os campos obrigatórios devem ser preenchidos.");
+            }
+            
+            if (empty($editora)) {
+                $campo_com_erro = 'editora';
+                throw new Exception("Todos os campos obrigatórios devem ser preenchidos.");
+            }
+            
+            if (empty($ano_publicacao)) {
+                $campo_com_erro = 'ano_publicacao';
                 throw new Exception("Todos os campos obrigatórios devem ser preenchidos.");
             }
             
             if ($edicao < 1) {
+                $campo_com_erro = 'edicao';
                 throw new Exception("A edição deve ser maior que zero.");
             }
             
             if (!preg_match('/^\d{4}$/', $ano_publicacao)) {
+                $campo_com_erro = 'ano_publicacao';
                 throw new Exception("O ano de publicação deve ter 4 dígitos.");
             }
             
             if ($ano_publicacao > date('Y')) {
+                $campo_com_erro = 'ano_publicacao';
                 throw new Exception("O ano de publicação não pode ser superior ao ano atual.");
             }
             
             if ($valor < 0) {
+                $campo_com_erro = 'valor';
                 throw new Exception("O valor não pode ser negativo.");
             }
             
@@ -145,6 +179,16 @@ if (isset($_GET['editar'])) {
         .valor-input {
             text-align: right;
         }
+        
+        .is-invalid {
+            border-color: #dc3545 !important;
+            box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25) !important;
+        }
+        
+        .is-invalid:focus {
+            border-color: #dc3545 !important;
+            box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25) !important;
+        }
     </style>
 </head>
 <body>
@@ -187,6 +231,29 @@ if (isset($_GET['editar'])) {
                         bsAlert.close();
                     }
                 }, 5000);
+                
+                // Foco automático no campo com erro
+                document.addEventListener('DOMContentLoaded', function() {
+                    <?php if ($campo_com_erro): ?>
+                        const campoErro = document.getElementById('<?= $campo_com_erro ?>');
+                        if (campoErro) {
+                            campoErro.focus();
+                            campoErro.classList.add('is-invalid');
+                        }
+                    <?php else: ?>
+                        // Se não há campo específico com erro, foca no primeiro campo vazio
+                        const requiredFields = ['titulo', 'editora', 'edicao', 'ano_publicacao', 'valor'];
+                        
+                        for (const fieldId of requiredFields) {
+                            const field = document.getElementById(fieldId);
+                            if (field && !field.value.trim()) {
+                                field.focus();
+                                field.classList.add('is-invalid');
+                                break;
+                            }
+                        }
+                    <?php endif; ?>
+                });
             </script>
         <?php endif; ?>
 
@@ -210,35 +277,35 @@ if (isset($_GET['editar'])) {
                             <div class="mb-3">
                                 <label for="titulo" class="form-label">Título *</label>
                                 <input type="text" class="form-control" id="titulo" name="titulo" 
-                                       value="<?= htmlspecialchars($livro_editando['Titulo'] ?? '') ?>" 
+                                       value="<?= htmlspecialchars($livro_editando['Titulo'] ?? $dados_formulario['titulo']) ?>" 
                                        maxlength="40" required>
                             </div>
                             
                             <div class="mb-3">
                                 <label for="editora" class="form-label">Editora *</label>
                                 <input type="text" class="form-control" id="editora" name="editora" 
-                                       value="<?= htmlspecialchars($livro_editando['Editora'] ?? '') ?>" 
+                                       value="<?= htmlspecialchars($livro_editando['Editora'] ?? $dados_formulario['editora']) ?>" 
                                        maxlength="40" required>
                             </div>
                             
                             <div class="mb-3">
                                 <label for="edicao" class="form-label">Edição *</label>
                                 <input type="number" class="form-control" id="edicao" name="edicao" 
-                                       value="<?= $livro_editando['Edicao'] ?? '1' ?>" 
+                                       value="<?= $livro_editando['Edicao'] ?? $dados_formulario['edicao'] ?>" 
                                        min="1" required>
                             </div>
                             
                             <div class="mb-3">
                                 <label for="ano_publicacao" class="form-label">Ano de Publicação *</label>
                                 <input type="text" class="form-control" id="ano_publicacao" name="ano_publicacao" 
-                                       value="<?= htmlspecialchars($livro_editando['AnoPublicacao'] ?? '') ?>" 
+                                       value="<?= htmlspecialchars($livro_editando['AnoPublicacao'] ?? $dados_formulario['ano_publicacao']) ?>" 
                                        pattern="\d{4}" maxlength="4" required>
                             </div>
                             
                             <div class="mb-3">
                                 <label for="valor" class="form-label">Valor (R$) *</label>
                                 <input type="text" class="form-control valor-input" id="valor" name="valor" 
-                                       value="<?= $livro_editando ? number_format($livro_editando['Valor'], 2, ',', '.') : '' ?>" 
+                                       value="<?= $livro_editando ? number_format($livro_editando['Valor'], 2, ',', '.') : $dados_formulario['valor'] ?>" 
                                        required>
                             </div>
                             
