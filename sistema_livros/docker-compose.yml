@@ -1,6 +1,28 @@
 version: '3.8'
 
 services:
+  web:
+    image: php:8.1-apache
+    container_name: sistema_livros_web
+    restart: always
+    ports:
+      - "8000:80"
+    volumes:
+      - .:/var/www/html
+      - ./apache-config.conf:/etc/apache2/conf-available/sistema-livros.conf
+    environment:
+      - APACHE_DOCUMENT_ROOT=/var/www/html
+      - DOCKER_CONTAINER=1
+    depends_on:
+      - mysql
+    command: >
+      bash -c "
+      a2enmod rewrite &&
+      a2enconf sistema-livros &&
+      echo 'ServerName localhost' >> /etc/apache2/apache2.conf &&
+      apache2-foreground
+      "
+
   mysql:
     image: mysql:8.0
     container_name: sistema_livros_mysql
