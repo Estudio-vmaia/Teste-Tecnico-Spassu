@@ -1,0 +1,33 @@
+/* Layout global para manter footer no rodapé */
+html, body {
+    height: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+.main-content {
+    flex: 1;
+}
+
+footer {
+    margin-top: auto;
+}
+
+/* Estilos para campos com erro */
+.is-invalid {
+    border-color: #dc3545 !important;
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25) !important;
+}
+
+.is-invalid:focus {
+    border-color: #dc3545 !important;
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25) !important;
+}
+
+/* Estilos específicos para campos de valor monetário */
+.valor-input {
+    text-align: right;
+}

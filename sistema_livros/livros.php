@@ -195,28 +195,14 @@ if (isset($_GET['editar'])) {
     <title>Gerenciar Livros</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="css/sb-admin-2.css" rel="stylesheet">
+    <link href="css/layout.css" rel="stylesheet">
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet">
-    <style>
-        .valor-input {
-            text-align: right;
-        }
-        
-        .is-invalid {
-            border-color: #dc3545 !important;
-            box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25) !important;
-        }
-        
-        .is-invalid:focus {
-            border-color: #dc3545 !important;
-            box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25) !important;
-        }
-    </style>
 </head>
 <body>
 
     <?php include 'menu.php'; ?>
 
-    <div class="container my-4">
+    <div class="container my-4 main-content">
         <!-- Mensagens -->
         <?php if ($mensagem): ?>
             <div class="alert alert-<?= $tipo_mensagem ?> alert-dismissible fade show" role="alert" id="mensagem-alert">
@@ -380,6 +366,30 @@ if (isset($_GET['editar'])) {
                             </div>
                         <?php endif; ?>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Confirmação de Exclusão -->
+    <div class="modal fade" id="modalExcluir" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirmar Exclusão</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Tem certeza que deseja excluir o livro <strong id="tituloLivro"></strong>?</p>
+                    <p class="text-danger"><small>Esta ação não pode ser desfeita e removerá todos os relacionamentos.</small></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <form method="POST" style="display: inline;">
+                        <input type="hidden" name="acao" value="excluir">
+                        <input type="hidden" name="codl" id="codlExcluir">
+                        <button type="submit" class="btn btn-danger">Excluir</button>
+                    </form>
                 </div>
             </div>
         </div>
