@@ -5,6 +5,45 @@ require_once 'conn.php';
 $mensagem = '';
 $tipo_mensagem = '';
 
+function validarDadosAutor($nome, $pdo, $codau_excluir = null) {
+    $nome = trim($nome);
+    $erros = [];
+    
+    // Validações básicas
+    if (empty($nome)) {
+        $erros[] = "O nome do autor é obrigatório.";
+    }
+    
+    if (strlen(trim($nome)) < 2) {
+        $erros[] = "Nome do autor deve ter pelo menos 2 caracteres.";
+    }
+    
+    if (strlen($nome) > 40) {
+        $erros[] = "O nome do autor deve ter no máximo 40 caracteres.";
+    }
+    
+    // Verificar duplicação apenas se não há erros básicos
+    if (empty($erros)) {
+        if ($codau_excluir !== null) {
+
+            // Excluir o próprio registro da verificação
+            $sql_check = "SELECT COUNT(*) FROM autor WHERE Nome = ? AND CodAu != ?";
+            $stmt_check = executarQuery($pdo, $sql_check, [$nome, $codau_excluir]);
+        } else {
+
+            // Verificar se já existe
+            $sql_check = "SELECT COUNT(*) FROM autor WHERE Nome = ?";
+            $stmt_check = executarQuery($pdo, $sql_check, [$nome]);
+        }
+        
+        if ($stmt_check->fetchColumn() > 0) {
+            $erros[] = "Já existe um autor com este nome.";
+        }
+    }
+    
+    return $erros;
+}
+
 // Processar formulário
 if ($_POST) {
     $acao = $_POST['acao'] ?? '';
@@ -13,24 +52,11 @@ if ($_POST) {
         if ($acao === 'inserir') {
             $nome = trim($_POST['nome']);
             
-            // Validações
-            if (empty($nome)) {
-                throw new Exception("O nome do autor é obrigatório.");
-            }
+            // Validar dados usando a função reutilizável
+            $erros_validacao = validarDadosAutor($nome, $pdo);
             
-            if (strlen(trim($nome)) < 2) {
-                throw new Exception("Nome do autor deve ter pelo menos 2 caracteres.");
-            }
-            
-            if (strlen($nome) > 40) {
-                throw new Exception("O nome do autor deve ter no máximo 40 caracteres.");
-            }
-            
-            // Verificar se já existe
-            $sql_check = "SELECT COUNT(*) FROM autor WHERE Nome = ?";
-            $stmt_check = executarQuery($pdo, $sql_check, [$nome]);
-            if ($stmt_check->fetchColumn() > 0) {
-                throw new Exception("Já existe um autor com este nome.");
+            if (!empty($erros_validacao)) {
+                throw new Exception(implode("<br>", $erros_validacao));
             }
             
             $sql = "INSERT INTO autor (Nome) VALUES (?)";
@@ -43,24 +69,11 @@ if ($_POST) {
             $codau = (int)$_POST['codau'];
             $nome = trim($_POST['nome']);
             
-            // Validações (mesmas do inserir)
-            if (empty($nome)) {
-                throw new Exception("O nome do autor é obrigatório.");
-            }
+            // Validar dados usando a função reutilizável (passando o ID para excluir da verificação de duplicação)
+            $erros_validacao = validarDadosAutor($nome, $pdo, $codau);
             
-            if (strlen(trim($nome)) < 2) {
-                throw new Exception("Nome do autor deve ter pelo menos 2 caracteres.");
-            }
-            
-            if (strlen($nome) > 40) {
-                throw new Exception("O nome do autor deve ter no máximo 40 caracteres.");
-            }
-            
-            // Verificar se já existe (exceto o próprio registro)
-            $sql_check = "SELECT COUNT(*) FROM autor WHERE Nome = ? AND CodAu != ?";
-            $stmt_check = executarQuery($pdo, $sql_check, [$nome, $codau]);
-            if ($stmt_check->fetchColumn() > 0) {
-                throw new Exception("Já existe um autor com este nome.");
+            if (!empty($erros_validacao)) {
+                throw new Exception(implode("<br>", $erros_validacao));
             }
             
             $sql = "UPDATE autor SET Nome = ? WHERE CodAu = ?";
@@ -70,6 +83,7 @@ if ($_POST) {
             $tipo_mensagem = "success";
             
         } elseif ($acao === 'excluir') {
+
             $codau = (int)$_POST['codau'];
             
             // Verificar se o autor tem livros associados
@@ -156,8 +170,7 @@ if (isset($_GET['editar'])) {
                 <?= htmlspecialchars($mensagem) ?>
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
-            <script>
-                // Auto-hide da mensagem após 5 segundos
+            <script>                
                 setTimeout(function() {
                     const alert = document.getElementById('mensagem-alert');
                     if (alert) {

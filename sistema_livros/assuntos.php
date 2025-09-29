@@ -5,6 +5,46 @@ require_once 'conn.php';
 $mensagem = '';
 $tipo_mensagem = '';
 
+
+function validarDadosAssunto($descricao, $pdo, $codas_excluir = null) {
+
+    $descricao = trim($descricao);
+    $erros = [];
+    
+    // Validações básicas
+    if (empty($descricao)) {
+        $erros[] = "A descrição do assunto é obrigatória.";
+    }
+    
+    if (strlen(trim($descricao)) < 3) {
+        $erros[] = "Descrição do assunto deve ter pelo menos 3 caracteres.";
+    }
+    
+    if (strlen($descricao) > 20) {
+        $erros[] = "A descrição do assunto deve ter no máximo 20 caracteres.";
+    }
+    
+    if (empty($erros)) {
+        if ($codas_excluir !== null) {
+
+            // Excluir o próprio registro da verificação
+            $sql_check = "SELECT COUNT(*) FROM assunto WHERE Descricao = ? AND codAs != ?";
+            $stmt_check = executarQuery($pdo, $sql_check, [$descricao, $codas_excluir]);
+        } else {
+
+            // Verificar se já existe
+            $sql_check = "SELECT COUNT(*) FROM assunto WHERE Descricao = ?";
+            $stmt_check = executarQuery($pdo, $sql_check, [$descricao]);
+        }
+        
+        if ($stmt_check->fetchColumn() > 0) {
+            $erros[] = "Já existe um assunto com esta descrição.";
+        }
+    }
+    
+    return $erros;
+}
+
 // Processar formulário
 if ($_POST) {
     $acao = $_POST['acao'] ?? '';
@@ -13,24 +53,11 @@ if ($_POST) {
         if ($acao === 'inserir') {
             $descricao = trim($_POST['descricao']);
             
-            // Validações
-            if (empty($descricao)) {
-                throw new Exception("A descrição do assunto é obrigatória.");
-            }
+            // Validar dados usando a função reutilizável
+            $erros_validacao = validarDadosAssunto($descricao, $pdo);
             
-            if (strlen(trim($descricao)) < 3) {
-                throw new Exception("Descrição do assunto deve ter pelo menos 3 caracteres.");
-            }
-            
-            if (strlen($descricao) > 20) {
-                throw new Exception("A descrição do assunto deve ter no máximo 20 caracteres.");
-            }
-            
-            // Verificar se já existe
-            $sql_check = "SELECT COUNT(*) FROM assunto WHERE Descricao = ?";
-            $stmt_check = executarQuery($pdo, $sql_check, [$descricao]);
-            if ($stmt_check->fetchColumn() > 0) {
-                throw new Exception("Já existe um assunto com esta descrição.");
+            if (!empty($erros_validacao)) {
+                throw new Exception(implode("<br>", $erros_validacao));
             }
             
             $sql = "INSERT INTO assunto (Descricao) VALUES (?)";
@@ -43,24 +70,11 @@ if ($_POST) {
             $codas = (int)$_POST['codas'];
             $descricao = trim($_POST['descricao']);
             
-            // Validações (mesmas do inserir)
-            if (empty($descricao)) {
-                throw new Exception("A descrição do assunto é obrigatória.");
-            }
+            // Validar dados usando a função reutilizável (passando o ID para excluir da verificação de duplicação)
+            $erros_validacao = validarDadosAssunto($descricao, $pdo, $codas);
             
-            if (strlen(trim($descricao)) < 3) {
-                throw new Exception("Descrição do assunto deve ter pelo menos 3 caracteres.");
-            }
-            
-            if (strlen($descricao) > 20) {
-                throw new Exception("A descrição do assunto deve ter no máximo 20 caracteres.");
-            }
-            
-            // Verificar se já existe (exceto o próprio registro)
-            $sql_check = "SELECT COUNT(*) FROM assunto WHERE Descricao = ? AND codAs != ?";
-            $stmt_check = executarQuery($pdo, $sql_check, [$descricao, $codas]);
-            if ($stmt_check->fetchColumn() > 0) {
-                throw new Exception("Já existe um assunto com esta descrição.");
+            if (!empty($erros_validacao)) {
+                throw new Exception(implode("<br>", $erros_validacao));
             }
             
             $sql = "UPDATE assunto SET Descricao = ? WHERE codAs = ?";
