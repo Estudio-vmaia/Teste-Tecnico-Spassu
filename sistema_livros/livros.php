@@ -409,11 +409,13 @@ if (isset($_GET['editar'])) {
         </div>
     </div>
 
+    <?php include 'footer.php'; ?>
+
     <!-- Scripts -->
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script>
-        
+
         // Máscara para valor monetário
         document.getElementById('valor').addEventListener('input', function(e) {
             let value = e.target.value.replace(/\D/g, '');

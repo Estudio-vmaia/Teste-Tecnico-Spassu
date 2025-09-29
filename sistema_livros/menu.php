@@ -17,6 +17,9 @@
             <a class="nav-link" href="assuntos.php">
                 <i class="fas fa-tags"></i> Assuntos
             </a>
+            <a class="nav-link" href="relacionamentos.php">
+                <i class="fas fa-link"></i> Relacionamentos
+            </a>
             <a class="nav-link" href="relatorio.php">
                 <i class="fas fa-chart-bar"></i> Relatórios
             </a>

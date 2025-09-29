@@ -63,6 +63,7 @@ if ($_POST) {
             $tipo_mensagem = "success";
             
         } elseif ($acao === 'editar') {
+            
             $codau = (int)$_POST['codau'];
             $nome = trim($_POST['nome']);
             

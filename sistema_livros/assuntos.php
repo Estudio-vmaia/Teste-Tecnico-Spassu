@@ -1,7 +1,6 @@
 <?php
 require_once 'conn.php';
 
-// Variáveis para mensagens
 $mensagem = '';
 $tipo_mensagem = '';
 
@@ -11,7 +10,6 @@ function validarDadosAssunto($descricao, $pdo, $codas_excluir = null) {
     $descricao = trim($descricao);
     $erros = [];
     
-    // Validações básicas
     if (empty($descricao)) {
         $erros[] = "A descrição do assunto é obrigatória.";
     }
@@ -53,7 +51,6 @@ if ($_POST) {
         if ($acao === 'inserir') {
             $descricao = trim($_POST['descricao']);
             
-            // Validar dados usando a função reutilizável
             $erros_validacao = validarDadosAssunto($descricao, $pdo);
             
             if (!empty($erros_validacao)) {
@@ -67,10 +64,10 @@ if ($_POST) {
             $tipo_mensagem = "success";
             
         } elseif ($acao === 'editar') {
+            
             $codas = (int)$_POST['codas'];
             $descricao = trim($_POST['descricao']);
             
-            // Validar dados usando a função reutilizável (passando o ID para excluir da verificação de duplicação)
             $erros_validacao = validarDadosAssunto($descricao, $pdo, $codas);
             
             if (!empty($erros_validacao)) {
@@ -84,6 +81,7 @@ if ($_POST) {
             $tipo_mensagem = "success";
             
         } elseif ($acao === 'excluir') {
+
             $codas = (int)$_POST['codas'];
             
             // Verificar se o assunto tem livros associados

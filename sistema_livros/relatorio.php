@@ -20,6 +20,7 @@ $estatisticas = $stmt_stats->fetch();
 // Agrupar dados por autor para exibição
 $relatorio_agrupado = [];
 foreach ($dados_relatorio as $linha) {
+    
     $autor = $linha['NomeAutor'];
     if (!isset($relatorio_agrupado[$autor])) {
         $relatorio_agrupado[$autor] = [

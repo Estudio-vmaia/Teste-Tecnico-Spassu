@@ -25,22 +25,8 @@ session_start();
     </style>
 </head>
 <body>
-    <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container">
-            <a class="navbar-brand" href="index.php">
-                <i class="fas fa-book"></i> Sistema de Livros
-            </a>
-            <div class="navbar-nav ms-auto">
-                <a class="nav-link" href="relacionamentos.php">
-                    <i class="fas fa-link"></i> Relacionamentos
-                </a>
-                <a class="nav-link" href="relatorio.php">
-                    <i class="fas fa-chart-bar"></i> Relatórios
-                </a>
-            </div>
-        </div>
-    </nav>
+    
+    <?php include 'menu.php'; ?>
 
     <!-- Hero Section -->
     <div class="hero-section">
@@ -53,7 +39,7 @@ session_start();
     <!-- Main Content -->
     <div class="container my-5">
         <div class="row">
-            
+
             <!-- Livros -->
             <div class="col-lg-4 mb-4">
                 <div class="card card-hover h-100">
@@ -132,12 +118,7 @@ session_start();
         </div>
     </div>
 
-    <!-- Footer -->
-    <footer class="bg-dark text-white text-center py-3 mt-5">
-        <div class="container">
-            <p class="mb-0">&copy; 2025 Sistema de Cadastro de Livros - Desenvolvido com PHP</p>
-        </div>
-    </footer>
+    <?php include 'footer.php'; ?>    
 
     <!-- Scripts -->
     <script src="vendor/jquery/jquery.min.js"></script>
