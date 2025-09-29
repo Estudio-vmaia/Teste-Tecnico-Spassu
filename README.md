@@ -57,13 +57,7 @@ docker ps
 ```
 
 ### 3. Acessar o Sistema
-```bash
-# Usar servidor PHP integrado (recomendado para desenvolvimento)
-php -S localhost:8000
-
-# Ou usar servidor web local (Apache/Nginx)
-# Configurar virtual host apontando para a pasta sistema_livros
-```
+O PHP já está configurado para rodar automaticamente junto com o Docker via `docker-compose.yml`. Basta acessar no navegador após subir os containers, não é necessário iniciar manualmente o servidor PHP.
 
 ### 4. Acessar no Navegador
 - **URL**: http://localhost:8000
