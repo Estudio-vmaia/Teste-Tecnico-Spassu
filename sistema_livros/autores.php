@@ -146,7 +146,7 @@ if (isset($_GET['editar'])) {
         <!-- Mensagens -->
         <?php if ($mensagem): ?>
             <div class="alert alert-<?= $tipo_mensagem ?> alert-dismissible fade show" role="alert" id="mensagem-alert">
-                <?= htmlspecialchars($mensagem) ?>
+                <?= htmlspecialchars($mensagem ?? '') ?>
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
 
@@ -176,7 +176,7 @@ if (isset($_GET['editar'])) {
                             <div class="mb-3">
                                 <label for="nome" class="form-label">Nome do Autor *</label>
                                 <input type="text" class="form-control" id="nome" name="nome" 
-                                       value="<?= htmlspecialchars($autor_editando['Nome'] ?? '') ?>" 
+                                       value="<?= htmlspecialchars(($autor_editando['Nome'] ?? '') ?? '') ?>" 
                                        maxlength="40" required>
                                 <div class="form-text">Máximo 40 caracteres</div>
                             </div>
@@ -225,14 +225,14 @@ if (isset($_GET['editar'])) {
                                         <?php foreach ($autores as $autor): ?>
                                             <tr>
                                                 <td>
-                                                    <strong><?= htmlspecialchars($autor['Nome']) ?></strong>
+                                                    <strong><?= htmlspecialchars($autor['Nome'] ?? '') ?></strong>
                                                 </td>
                                                 <td>
                                                     <span class="badge bg-primary"><?= $autor['TotalLivros'] ?></span>
                                                 </td>
                                                 <td>
                                                     <small class="text-muted">
-                                                        <?= $autor['Livros'] ? htmlspecialchars($autor['Livros']) : 'Sem livros' ?>
+                                                        <?= $autor['Livros'] ? htmlspecialchars($autor['Livros'] ?? '') : 'Sem livros' ?>
                                                     </small>
                                                 </td>
                                                 <td>
@@ -243,7 +243,7 @@ if (isset($_GET['editar'])) {
                                                         </a>
                                                         <?php if ($autor['TotalLivros'] == 0): ?>
                                                             <button type="button" class="btn btn-outline-danger" 
-                                                                    onclick="confirmarExclusao(<?= $autor['CodAu'] ?>, '<?= htmlspecialchars($autor['Nome']) ?>')" 
+                                                                    onclick="confirmarExclusao(<?= $autor['CodAu'] ?>, '<?= htmlspecialchars($autor['Nome'] ?? '') ?>')" 
                                                                     title="Excluir">
                                                                 <i class="fas fa-trash"></i>
                                                             </button>

@@ -206,7 +206,7 @@ if (isset($_GET['editar'])) {
         <!-- Mensagens -->
         <?php if ($mensagem): ?>
             <div class="alert alert-<?= $tipo_mensagem ?> alert-dismissible fade show" role="alert" id="mensagem-alert">
-                <?= htmlspecialchars($mensagem) ?>
+                <?= htmlspecialchars($mensagem ?? '') ?>
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
             <script>
@@ -258,14 +258,14 @@ if (isset($_GET['editar'])) {
                             <div class="mb-3">
                                 <label for="titulo" class="form-label">Título *</label>
                                 <input type="text" class="form-control" id="titulo" name="titulo" 
-                                       value="<?= htmlspecialchars($livro_editando['Titulo'] ?? $dados_formulario['titulo']) ?>" 
+                                       value="<?= htmlspecialchars(($livro_editando['Titulo'] ?? $dados_formulario['titulo']) ?? '') ?>" 
                                        maxlength="40" required>
                             </div>
                             
                             <div class="mb-3">
                                 <label for="editora" class="form-label">Editora *</label>
                                 <input type="text" class="form-control" id="editora" name="editora" 
-                                       value="<?= htmlspecialchars($livro_editando['Editora'] ?? $dados_formulario['editora']) ?>" 
+                                       value="<?= htmlspecialchars(($livro_editando['Editora'] ?? $dados_formulario['editora']) ?? '') ?>" 
                                        maxlength="40" required>
                             </div>
                             
@@ -279,14 +279,14 @@ if (isset($_GET['editar'])) {
                             <div class="mb-3">
                                 <label for="ano_publicacao" class="form-label">Ano de Publicação *</label>
                                 <input type="text" class="form-control" id="ano_publicacao" name="ano_publicacao" 
-                                       value="<?= htmlspecialchars($livro_editando['AnoPublicacao'] ?? $dados_formulario['ano_publicacao']) ?>" 
+                                       value="<?= htmlspecialchars(($livro_editando['AnoPublicacao'] ?? $dados_formulario['ano_publicacao']) ?? '') ?>" 
                                        pattern="\d{4}" maxlength="4" required>
                             </div>
                             
                             <div class="mb-3">
                                 <label for="valor" class="form-label">Valor (R$) *</label>
                                 <input type="text" class="form-control valor-input" id="valor" name="valor" 
-                                       value="<?= $livro_editando ? number_format($livro_editando['Valor'], 2, ',', '.') : $dados_formulario['valor'] ?>" 
+                                       value="<?= $livro_editando ? number_format($livro_editando['Valor'] ?? 0, 2, ',', '.') : $dados_formulario['valor'] ?>" 
                                        required>
                             </div>
                             
@@ -336,14 +336,14 @@ if (isset($_GET['editar'])) {
                                     <tbody>
                                         <?php foreach ($livros as $livro): ?>
                                             <tr>
-                                                <td><?= htmlspecialchars($livro['Titulo']) ?></td>
-                                                <td><?= htmlspecialchars($livro['Editora']) ?></td>
+                                                <td><?= htmlspecialchars($livro['Titulo'] ?? '') ?></td>
+                                                <td><?= htmlspecialchars($livro['Editora'] ?? '') ?></td>
                                                 <td><?= $livro['Edicao'] ?></td>
                                                 <td><?= $livro['AnoPublicacao'] ?></td>
-                                                <td>R$ <?= number_format($livro['Valor'], 2, ',', '.') ?></td>
+                                                <td>R$ <?= number_format($livro['Valor'] ?? 0, 2, ',', '.') ?></td>
                                                 <td>
                                                     <small class="text-muted">
-                                                        <?= $livro['Autores'] ? htmlspecialchars($livro['Autores']) : 'Sem autores' ?>
+                                                        <?= $livro['Autores'] ? htmlspecialchars($livro['Autores'] ?? '') : 'Sem autores' ?>
                                                     </small>
                                                 </td>
                                                 <td>
@@ -353,7 +353,7 @@ if (isset($_GET['editar'])) {
                                                             <i class="fas fa-edit"></i>
                                                         </a>
                                                         <button type="button" class="btn btn-outline-danger" 
-                                                                onclick="confirmarExclusao(<?= $livro['Codl'] ?>, '<?= htmlspecialchars($livro['Titulo']) ?>')" 
+                                                                onclick="confirmarExclusao(<?= $livro['Codl'] ?>, '<?= htmlspecialchars($livro['Titulo'] ?? '') ?>')" 
                                                                 title="Excluir">
                                                             <i class="fas fa-trash"></i>
                                                         </button>

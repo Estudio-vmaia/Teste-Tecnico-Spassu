@@ -162,7 +162,7 @@ foreach ($dados_relatorio as $linha) {
                                 <div class="row align-items-center">
                                     <div class="col-md-8">
                                         <h5 class="mb-0">
-                                            <i class="fas fa-user-edit"></i> <?= htmlspecialchars($autor['NomeAutor']) ?>
+                                            <i class="fas fa-user-edit"></i> <?= htmlspecialchars($autor['NomeAutor'] ?? '') ?>
                                         </h5>
                                     </div>
                                     <div class="col-md-4 text-end">
@@ -194,9 +194,9 @@ foreach ($dados_relatorio as $linha) {
                                             <?php foreach ($autor['Livros'] as $livro): ?>
                                                 <tr>
                                                     <td>
-                                                        <strong><?= htmlspecialchars($livro['Titulo']) ?></strong>
+                                                        <strong><?= htmlspecialchars($livro['Titulo'] ?? '') ?></strong>
                                                     </td>
-                                                    <td><?= htmlspecialchars($livro['Editora']) ?></td>
+                                                    <td><?= htmlspecialchars($livro['Editora'] ?? '') ?></td>
                                                     <td><?= $livro['Edicao'] ?></td>
                                                     <td><?= $livro['AnoPublicacao'] ?></td>
                                                     <td>
@@ -206,7 +206,7 @@ foreach ($dados_relatorio as $linha) {
                                                     </td>
                                                     <td>
                                                         <small class="text-muted">
-                                                            <?= $livro['Assuntos'] ? htmlspecialchars($livro['Assuntos']) : 'Sem assuntos' ?>
+                                                            <?= $livro['Assuntos'] ? htmlspecialchars($livro['Assuntos'] ?? '') : 'Sem assuntos' ?>
                                                         </small>
                                                     </td>
                                                 </tr>

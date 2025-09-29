@@ -130,7 +130,7 @@ if (isset($_GET['livro'])) {
         <!-- Mensagens -->
         <?php if ($mensagem): ?>
             <div class="alert alert-<?= $tipo_mensagem ?> alert-dismissible fade show" role="alert" id="mensagem-alert">
-                <?= htmlspecialchars($mensagem) ?>
+                <?= htmlspecialchars($mensagem ?? '') ?>
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
             
@@ -158,7 +158,7 @@ if (isset($_GET['livro'])) {
                                         <?php foreach ($livros as $livro): ?>
                                             <option value="<?= $livro['Codl'] ?>" 
                                                     <?= ($livro_selecionado && $livro['Codl'] == $livro_selecionado['Codl']) ? 'selected' : '' ?>>
-                                                <?= htmlspecialchars($livro['Titulo']) ?> - <?= htmlspecialchars($livro['Editora']) ?>
+                                                <?= htmlspecialchars($livro['Titulo'] ?? '') ?> - <?= htmlspecialchars($livro['Editora'] ?? '') ?>
                                             </option>
                                         <?php endforeach; ?>
                                     </select>
@@ -181,18 +181,18 @@ if (isset($_GET['livro'])) {
                         <div class="card-header bg-primary text-white">
                             <h5 class="mb-0">
                                 <i class="fas fa-info-circle"></i> 
-                                <?= htmlspecialchars($livro_selecionado['Titulo']) ?>
+                                <?= htmlspecialchars($livro_selecionado['Titulo'] ?? '') ?>
                             </h5>
                         </div>
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-md-6">
-                                    <p><strong>Editora:</strong> <?= htmlspecialchars($livro_selecionado['Editora']) ?></p>
+                                    <p><strong>Editora:</strong> <?= htmlspecialchars($livro_selecionado['Editora'] ?? '') ?></p>
                                     <p><strong>Edição:</strong> <?= $livro_selecionado['Edicao'] ?></p>
                                 </div>
                                 <div class="col-md-6">
                                     <p><strong>Ano:</strong> <?= $livro_selecionado['AnoPublicacao'] ?></p>
-                                    <p><strong>Valor:</strong> R$ <?= number_format($livro_selecionado['Valor'], 2, ',', '.') ?></p>
+                                    <p><strong>Valor:</strong> R$ <?= number_format($livro_selecionado['Valor'] ?? 0, 2, ',', '.') ?></p>
                                 </div>
                             </div>
                         </div>
@@ -228,7 +228,7 @@ if (isset($_GET['livro'])) {
                                                 ?>
                                                 <?php if (!$ja_associado): ?>
                                                     <option value="<?= $autor['CodAu'] ?>">
-                                                        <?= htmlspecialchars($autor['Nome']) ?>
+                                                        <?= htmlspecialchars($autor['Nome'] ?? '') ?>
                                                     </option>
                                                 <?php endif; ?>
                                             <?php endforeach; ?>
@@ -248,7 +248,7 @@ if (isset($_GET['livro'])) {
                             <?php else: ?>
                                 <?php foreach ($autores_livro as $autor): ?>
                                     <div class="d-flex justify-content-between align-items-center mb-2 p-2 bg-light rounded">
-                                        <span><?= htmlspecialchars($autor['Nome']) ?></span>
+                                        <span><?= htmlspecialchars($autor['Nome'] ?? '') ?></span>
                                         <form method="POST" style="display: inline;">
                                             <input type="hidden" name="acao" value="remover_autor">
                                             <input type="hidden" name="livro_codl" value="<?= $livro_selecionado['Codl'] ?>">
@@ -294,7 +294,7 @@ if (isset($_GET['livro'])) {
                                                 ?>
                                                 <?php if (!$ja_associado): ?>
                                                     <option value="<?= $assunto['codAs'] ?>">
-                                                        <?= htmlspecialchars($assunto['Descricao']) ?>
+                                                        <?= htmlspecialchars($assunto['Descricao'] ?? '') ?>
                                                     </option>
                                                 <?php endif; ?>
                                             <?php endforeach; ?>
@@ -314,7 +314,7 @@ if (isset($_GET['livro'])) {
                             <?php else: ?>
                                 <?php foreach ($assuntos_livro as $assunto): ?>
                                     <div class="d-flex justify-content-between align-items-center mb-2 p-2 bg-light rounded">
-                                        <span><?= htmlspecialchars($assunto['Descricao']) ?></span>
+                                        <span><?= htmlspecialchars($assunto['Descricao'] ?? '') ?></span>
                                         <form method="POST" style="display: inline;">
                                             <input type="hidden" name="acao" value="remover_assunto">
                                             <input type="hidden" name="livro_codl" value="<?= $livro_selecionado['Codl'] ?>">
