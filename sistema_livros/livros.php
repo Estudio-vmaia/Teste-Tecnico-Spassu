@@ -213,28 +213,8 @@ if (isset($_GET['editar'])) {
     </style>
 </head>
 <body>
-    <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container">
-            <a class="navbar-brand" href="index.php">
-                <i class="fas fa-book"></i> Sistema de Livros
-            </a>
-            <div class="navbar-nav ms-auto">
-                <a class="nav-link" href="index.php">
-                    <i class="fas fa-home"></i> Início
-                </a>
-                <a class="nav-link" href="autores.php">
-                    <i class="fas fa-user-edit"></i> Autores
-                </a>
-                <a class="nav-link" href="assuntos.php">
-                    <i class="fas fa-tags"></i> Assuntos
-                </a>
-                <a class="nav-link" href="relatorio.php">
-                    <i class="fas fa-chart-bar"></i> Relatórios
-                </a>
-            </div>
-        </div>
-    </nav>
+
+    <?php include 'menu.php'; ?>
 
     <div class="container my-4">
         <!-- Mensagens -->
@@ -244,14 +224,8 @@ if (isset($_GET['editar'])) {
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
             <script>
-                // Auto-hide da mensagem após 5 segundos
-                setTimeout(function() {
-                    const alert = document.getElementById('mensagem-alert');
-                    if (alert) {
-                        const bsAlert = new bootstrap.Alert(alert);
-                        bsAlert.close();
-                    }
-                }, 5000);
+
+                <?php include 'functions.js'; ?>
                 
                 // Foco automático no campo com erro
                 document.addEventListener('DOMContentLoaded', function() {
@@ -439,6 +413,7 @@ if (isset($_GET['editar'])) {
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script>
+        
         // Máscara para valor monetário
         document.getElementById('valor').addEventListener('input', function(e) {
             let value = e.target.value.replace(/\D/g, '');

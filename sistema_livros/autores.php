@@ -1,7 +1,6 @@
 <?php
 require_once 'conn.php';
 
-// Variáveis para mensagens
 $mensagem = '';
 $tipo_mensagem = '';
 
@@ -9,7 +8,6 @@ function validarDadosAutor($nome, $pdo, $codau_excluir = null) {
     $nome = trim($nome);
     $erros = [];
     
-    // Validações básicas
     if (empty($nome)) {
         $erros[] = "O nome do autor é obrigatório.";
     }
@@ -22,7 +20,6 @@ function validarDadosAutor($nome, $pdo, $codau_excluir = null) {
         $erros[] = "O nome do autor deve ter no máximo 40 caracteres.";
     }
     
-    // Verificar duplicação apenas se não há erros básicos
     if (empty($erros)) {
         if ($codau_excluir !== null) {
 
@@ -140,28 +137,8 @@ if (isset($_GET['editar'])) {
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet">
 </head>
 <body>
-    <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container">
-            <a class="navbar-brand" href="index.php">
-                <i class="fas fa-book"></i> Sistema de Livros
-            </a>
-            <div class="navbar-nav ms-auto">
-                <a class="nav-link" href="index.php">
-                    <i class="fas fa-home"></i> Início
-                </a>
-                <a class="nav-link" href="livros.php">
-                    <i class="fas fa-book"></i> Livros
-                </a>
-                <a class="nav-link" href="assuntos.php">
-                    <i class="fas fa-tags"></i> Assuntos
-                </a>
-                <a class="nav-link" href="relatorio.php">
-                    <i class="fas fa-chart-bar"></i> Relatórios
-                </a>
-            </div>
-        </div>
-    </nav>
+    
+    <?php include 'menu.php'; ?>
 
     <div class="container my-4">
         <!-- Mensagens -->
@@ -170,15 +147,11 @@ if (isset($_GET['editar'])) {
                 <?= htmlspecialchars($mensagem) ?>
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
+
             <script>                
-                setTimeout(function() {
-                    const alert = document.getElementById('mensagem-alert');
-                    if (alert) {
-                        const bsAlert = new bootstrap.Alert(alert);
-                        bsAlert.close();
-                    }
-                }, 5000);
+                <?php include 'functions.js'; ?>
             </script>
+
         <?php endif; ?>
 
         <div class="row">

@@ -122,31 +122,8 @@ if (isset($_GET['livro'])) {
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet">
 </head>
 <body>
-    <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container">
-            <a class="navbar-brand" href="index.php">
-                <i class="fas fa-book"></i> Sistema de Livros
-            </a>
-            <div class="navbar-nav ms-auto">
-                <a class="nav-link" href="index.php">
-                    <i class="fas fa-home"></i> Início
-                </a>
-                <a class="nav-link" href="livros.php">
-                    <i class="fas fa-book"></i> Livros
-                </a>
-                <a class="nav-link" href="autores.php">
-                    <i class="fas fa-user-edit"></i> Autores
-                </a>
-                <a class="nav-link" href="assuntos.php">
-                    <i class="fas fa-tags"></i> Assuntos
-                </a>
-                <a class="nav-link" href="relatorio.php">
-                    <i class="fas fa-chart-bar"></i> Relatórios
-                </a>
-            </div>
-        </div>
-    </nav>
+    
+    <?php include 'menu.php'; ?>
 
     <div class="container my-4">
         <!-- Mensagens -->
@@ -155,16 +132,11 @@ if (isset($_GET['livro'])) {
                 <?= htmlspecialchars($mensagem) ?>
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
+            
             <script>
-                // Auto-hide da mensagem após 5 segundos
-                setTimeout(function() {
-                    const alert = document.getElementById('mensagem-alert');
-                    if (alert) {
-                        const bsAlert = new bootstrap.Alert(alert);
-                        bsAlert.close();
-                    }
-                }, 5000);
+                <?php include 'functions.js'; ?>
             </script>
+            
         <?php endif; ?>
 
         <div class="row">
