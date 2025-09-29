@@ -9,6 +9,7 @@ session_start();
     <title>Sistema de Cadastro de Livros</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="css/sb-admin-2.css" rel="stylesheet">
+    <link href="css/layout.css" rel="stylesheet">
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet">
     <style>
         .hero-section {
@@ -37,7 +38,7 @@ session_start();
     </div>
 
     <!-- Main Content -->
-    <div class="container my-5">
+    <div class="container my-5 main-content">
         <div class="row">
 
             <!-- Livros -->

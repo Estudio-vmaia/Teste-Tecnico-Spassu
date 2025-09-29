@@ -119,13 +119,14 @@ if (isset($_GET['livro'])) {
     <title>Gerenciar Relacionamentos</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="css/sb-admin-2.css" rel="stylesheet">
+    <link href="css/layout.css" rel="stylesheet">
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet">
 </head>
 <body>
     
     <?php include 'menu.php'; ?>
 
-    <div class="container my-4">
+    <div class="container my-4 main-content">
         <!-- Mensagens -->
         <?php if ($mensagem): ?>
             <div class="alert alert-<?= $tipo_mensagem ?> alert-dismissible fade show" role="alert" id="mensagem-alert">
@@ -342,6 +343,8 @@ if (isset($_GET['livro'])) {
             <?php endif; ?>
         </div>
     </div>
+
+    <?php include 'footer.php'; ?>
 
     <!-- Scripts -->
     <script src="vendor/jquery/jquery.min.js"></script>

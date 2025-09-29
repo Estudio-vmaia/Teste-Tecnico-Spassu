@@ -46,6 +46,7 @@ foreach ($dados_relatorio as $linha) {
     <title>Relatório de Livros por Autor</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="css/sb-admin-2.css" rel="stylesheet">
+    <link href="css/layout.css" rel="stylesheet">
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet">
     <style>
         .stats-card {
@@ -76,7 +77,7 @@ foreach ($dados_relatorio as $linha) {
     
     <?php include 'menu.php'; ?>
 
-    <div class="container my-4">
+    <div class="container my-4 main-content">
         <!-- Cabeçalho do Relatório -->
         <div class="row mb-4">
             <div class="col-12">
@@ -250,6 +251,8 @@ foreach ($dados_relatorio as $linha) {
             </div>
         </div>
     </div>
+
+    <?php include 'footer.php'; ?>
 
     <!-- Scripts -->
     <script src="vendor/jquery/jquery.min.js"></script>
