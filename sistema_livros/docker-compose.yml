@@ -17,6 +17,9 @@ services:
       - mysql
     command: >
       bash -c "
+      apt-get update &&
+      apt-get install -y libzip-dev zip unzip &&
+      docker-php-ext-install pdo pdo_mysql &&
       a2enmod rewrite &&
       a2enconf sistema-livros &&
       echo 'ServerName localhost' >> /etc/apache2/apache2.conf &&

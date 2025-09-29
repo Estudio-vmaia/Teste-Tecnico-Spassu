@@ -93,11 +93,11 @@ foreach ($dados_relatorio as $linha) {
                                 <p class="mb-0">Livros</p>
                             </div>
                             <div class="col-md-3">
-                                <h3>R$ <?= number_format($estatisticas['ValorTotalAcervo'], 2, ',', '.') ?></h3>
+                                <h3>R$ <?= number_format($estatisticas['ValorTotalAcervo'] ?? 0, 2, ',', '.') ?></h3>
                                 <p class="mb-0">Valor Total</p>
                             </div>
                             <div class="col-md-3">
-                                <h3>R$ <?= number_format($estatisticas['ValorMedioLivro'], 2, ',', '.') ?></h3>
+                                <h3>R$ <?= number_format($estatisticas['ValorMedioLivro'] ?? 0, 2, ',', '.') ?></h3>
                                 <p class="mb-0">Valor Médio</p>
                             </div>
                         </div>
@@ -170,7 +170,7 @@ foreach ($dados_relatorio as $linha) {
                                             <?= $autor['TotalLivros'] ?> livro(s)
                                         </span>
                                         <span class="badge bg-success fs-6 ms-2">
-                                            R$ <?= number_format($autor['ValorTotalLivros'], 2, ',', '.') ?>
+                                            R$ <?= number_format($autor['ValorTotalLivros'] ?? 0, 2, ',', '.') ?>
                                         </span>
                                     </div>
                                 </div>
@@ -201,7 +201,7 @@ foreach ($dados_relatorio as $linha) {
                                                     <td><?= $livro['AnoPublicacao'] ?></td>
                                                     <td>
                                                         <span class="text-success fw-bold">
-                                                            R$ <?= number_format($livro['Valor'], 2, ',', '.') ?>
+                                                            R$ <?= number_format($livro['Valor'] ?? 0, 2, ',', '.') ?>
                                                         </span>
                                                     </td>
                                                     <td>
@@ -237,8 +237,8 @@ foreach ($dados_relatorio as $linha) {
                                 <p><strong>Total de Livros:</strong> <?= $estatisticas['TotalLivros'] ?></p>
                             </div>
                             <div class="col-md-6">
-                                <p><strong>Valor Total do Acervo:</strong> R$ <?= number_format($estatisticas['ValorTotalAcervo'], 2, ',', '.') ?></p>
-                                <p><strong>Valor Médio por Livro:</strong> R$ <?= number_format($estatisticas['ValorMedioLivro'], 2, ',', '.') ?></p>
+                                <p><strong>Valor Total do Acervo:</strong> R$ <?= number_format($estatisticas['ValorTotalAcervo'] ?? 0, 2, ',', '.') ?></p>
+                                <p><strong>Valor Médio por Livro:</strong> R$ <?= number_format($estatisticas['ValorMedioLivro'] ?? 0, 2, ',', '.') ?></p>
                             </div>
                         </div>
                         <hr>

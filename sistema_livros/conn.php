@@ -5,11 +5,24 @@
  */
 
 // Configurações do banco de dados
-$host = 'localhost';
-$port = '3306';
-$dbname = 'sistema_livros';
-$username = 'usuario';
-$password = 'senha123';
+// Detectar se está rodando no Docker
+$isDocker = getenv('DOCKER_CONTAINER') || file_exists('/.dockerenv');
+
+if ($isDocker) {
+    // Configurações para Docker
+    $host = 'mysql'; // Nome do serviço no docker-compose
+    $port = '3306';
+    $dbname = 'sistema_livros';
+    $username = 'usuario';
+    $password = 'senha123';
+} else {
+    // Configurações para desenvolvimento local
+    $host = 'localhost';
+    $port = '3306';
+    $dbname = 'sistema_livros';
+    $username = 'usuario';
+    $password = 'senha123';
+}
 
 // Configurações para diferentes ambientes
 if (isset($_SERVER['HTTP_HOST'])) {
