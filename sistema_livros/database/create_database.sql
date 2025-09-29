@@ -6,21 +6,24 @@ CREATE DATABASE IF NOT EXISTS sistema_livros CHARACTER SET utf8mb4 COLLATE utf8m
 USE sistema_livros;
 
 -- Tabela de Autores
-CREATE TABLE IF NOT EXISTS autor (
+DROP TABLE IF EXISTS autor;
+CREATE TABLE autor (
     CodAu INT AUTO_INCREMENT PRIMARY KEY,
     Nome VARCHAR(40) NOT NULL,
     INDEX idx_autor_nome (Nome)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Tabela de Assuntos
-CREATE TABLE IF NOT EXISTS assunto (
+DROP TABLE IF EXISTS assunto;
+CREATE TABLE assunto (
     codAs INT AUTO_INCREMENT PRIMARY KEY,
-    Descricao VARCHAR(20) NOT NULL,
+    Descricao VARCHAR(50) NOT NULL,
     INDEX idx_assunto_descricao (Descricao)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Tabela de Livros (com campo valor adicionado conforme solicitado)
-CREATE TABLE IF NOT EXISTS livro (
+DROP TABLE IF EXISTS livro;
+CREATE TABLE livro (
     Codl INT AUTO_INCREMENT PRIMARY KEY,
     Titulo VARCHAR(40) NOT NULL,
     Editora VARCHAR(40) NOT NULL,
@@ -33,7 +36,8 @@ CREATE TABLE IF NOT EXISTS livro (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Tabela de relacionamento Livro-Autor (Many-to-Many)
-CREATE TABLE IF NOT EXISTS livro_autor (
+DROP TABLE IF EXISTS livro_autor;
+CREATE TABLE livro_autor (
     Livro_Codl INT NOT NULL,
     Autor_CodAu INT NOT NULL,
     PRIMARY KEY (Livro_Codl, Autor_CodAu),
@@ -44,7 +48,8 @@ CREATE TABLE IF NOT EXISTS livro_autor (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Tabela de relacionamento Livro-Assunto (Many-to-Many)
-CREATE TABLE IF NOT EXISTS livro_assunto (
+DROP TABLE IF EXISTS livro_assunto;
+CREATE TABLE livro_assunto (
     Livro_Codl INT NOT NULL,
     Assunto_codAs INT NOT NULL,
     PRIMARY KEY (Livro_Codl, Assunto_codAs),
@@ -55,7 +60,8 @@ CREATE TABLE IF NOT EXISTS livro_assunto (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- View para relatório agrupado por autor
-CREATE OR REPLACE VIEW vw_relatorio_livros_por_autor AS
+DROP VIEW IF EXISTS vw_relatorio_livros_por_autor;
+CREATE VIEW vw_relatorio_livros_por_autor AS
 SELECT 
     a.CodAu,
     a.Nome as NomeAutor,
@@ -76,7 +82,34 @@ LEFT JOIN assunto s ON las.Assunto_codAs = s.codAs
 GROUP BY a.CodAu, a.Nome, l.Codl, l.Titulo, l.Editora, l.Edicao, l.AnoPublicacao, l.Valor
 ORDER BY a.Nome, l.Titulo;
 
--- Inserir dados de exemplo
+-- ============================================
+-- LIMPEZA DAS TABELAS (OPCIONAL)
+-- ============================================
+-- Descomente as linhas abaixo se quiser limpar os dados antes de inserir novos
+
+-- Desabilitar verificação de foreign keys temporariamente
+-- SET FOREIGN_KEY_CHECKS = 0;
+
+-- Limpar dados das tabelas (respeitando dependências)
+-- DELETE FROM livro_assunto;
+-- DELETE FROM livro_autor;
+-- DELETE FROM livro;
+-- DELETE FROM assunto;
+-- DELETE FROM autor;
+
+-- Reabilitar verificação de foreign keys
+-- SET FOREIGN_KEY_CHECKS = 1;
+
+-- Resetar auto_increment para começar do 1
+-- ALTER TABLE autor AUTO_INCREMENT = 1;
+-- ALTER TABLE assunto AUTO_INCREMENT = 1;
+-- ALTER TABLE livro AUTO_INCREMENT = 1;
+
+-- ============================================
+-- DADOS DE EXEMPLO PARA O SISTEMA
+-- ============================================
+
+-- 1. Inserir autores (5 autores brasileiros famosos)
 INSERT INTO autor (Nome) VALUES 
 ('Machado de Assis'),
 ('Clarice Lispector'),
@@ -84,6 +117,7 @@ INSERT INTO autor (Nome) VALUES
 ('Cecília Meireles'),
 ('Carlos Drummond de Andrade');
 
+-- 2. Inserir assuntos (8 categorias de assuntos)
 INSERT INTO assunto (Descricao) VALUES 
 ('Romance'),
 ('Poesia'),
@@ -94,6 +128,7 @@ INSERT INTO assunto (Descricao) VALUES
 ('História'),
 ('Filosofia');
 
+-- 3. Inserir livros (5 livros clássicos da literatura brasileira)
 INSERT INTO livro (Titulo, Editora, Edicao, AnoPublicacao, Valor) VALUES 
 ('Dom Casmurro', 'Editora Globo', 1, '1899', 29.90),
 ('A Hora da Estrela', 'Rocco', 1, '1977', 35.50),
@@ -101,7 +136,7 @@ INSERT INTO livro (Titulo, Editora, Edicao, AnoPublicacao, Valor) VALUES
 ('Romanceiro da Inconfidência', 'Nova Fronteira', 1, '1953', 38.90),
 ('A Rosa do Povo', 'Record', 1, '1945', 31.75);
 
--- Relacionar livros com autores
+-- 4. Relacionar livros com autores (relacionamentos many-to-many)
 INSERT INTO livro_autor (Livro_Codl, Autor_CodAu) VALUES 
 (1, 1), -- Dom Casmurro - Machado de Assis
 (2, 2), -- A Hora da Estrela - Clarice Lispector
@@ -109,10 +144,14 @@ INSERT INTO livro_autor (Livro_Codl, Autor_CodAu) VALUES
 (4, 4), -- Romanceiro da Inconfidência - Cecília Meireles
 (5, 5); -- A Rosa do Povo - Carlos Drummond de Andrade
 
--- Relacionar livros com assuntos
+-- 5. Relacionar livros com assuntos (relacionamentos many-to-many)
 INSERT INTO livro_assunto (Livro_Codl, Assunto_codAs) VALUES 
 (1, 1), (1, 4), -- Dom Casmurro - Romance, Literatura Brasileira
 (2, 1), (2, 4), -- A Hora da Estrela - Romance, Literatura Brasileira
 (3, 1), (3, 4), -- Gabriela, Cravo e Canela - Romance, Literatura Brasileira
 (4, 2), (4, 4), -- Romanceiro da Inconfidência - Poesia, Literatura Brasileira
 (5, 2), (5, 4); -- A Rosa do Povo - Poesia, Literatura Brasileira
+
+-- ============================================
+-- DADOS INSERIDOS COM SUCESSO!
+-- ============================================

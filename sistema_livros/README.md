@@ -44,7 +44,7 @@ Sistema web desenvolvido em PHP puro para gerenciamento de livros, autores e ass
 ### 1. Clonar/Download do Projeto
 ```bash
 # Navegar para a pasta do projeto
-cd "LayoutBase"
+cd "sistema_livros"
 ```
 
 ### 2. Executar com Docker
@@ -62,7 +62,7 @@ docker ps
 php -S localhost:8000
 
 # Ou usar servidor web local (Apache/Nginx)
-# Configurar virtual host apontando para a pasta LayoutBase
+# Configurar virtual host apontando para a pasta sistema_livros
 ```
 
 ### 4. Acessar no Navegador
@@ -86,7 +86,7 @@ php -S localhost:8000
 ## 📁 Estrutura do Projeto
 
 ```
-LayoutBase/
+sistema_livros/
 ├── index.php                 # Página inicial
 ├── livros.php               # CRUD de livros
 ├── autores.php              # CRUD de autores
