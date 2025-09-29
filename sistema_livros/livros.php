@@ -1,12 +1,10 @@
 <?php
 require_once 'conn.php';
 
-// Variáveis para mensagens
 $mensagem = '';
 $tipo_mensagem = '';
-$campo_com_erro = ''; // Para identificar qual campo tem erro
+$campo_com_erro = ''; 
 
-// Variáveis para persistir dados do formulário em caso de erro
 $dados_formulario = [
     'titulo' => '',
     'editora' => '',
@@ -15,63 +13,99 @@ $dados_formulario = [
     'valor' => ''
 ];
 
+function validarDadosLivro($dados, $retornar_primeiro_erro = false) {
+
+    $titulo             = trim($dados['titulo']);
+    $editora            = trim($dados['editora']);
+    $edicao             = (int)$dados['edicao'];
+    $ano_publicacao     = trim($dados['ano_publicacao']);
+    $valor              = str_replace(',', '.', str_replace('.', '', $dados['valor']));
+    
+    $validacoes = [
+        [
+            'condicao' => empty($titulo),
+            'campo'    => 'titulo',
+            'mensagem' => "Todos os campos obrigatórios devem ser preenchidos."
+        ],
+        [
+            'condicao' => empty($editora),
+            'campo'    => 'editora',
+            'mensagem' => "Todos os campos obrigatórios devem ser preenchidos."
+        ],
+        [
+            'condicao' => empty($ano_publicacao),
+            'campo'    => 'ano_publicacao',
+            'mensagem' => "Todos os campos obrigatórios devem ser preenchidos."
+        ],
+        [
+            'condicao' => $edicao < 1,
+            'campo'    => 'edicao',
+            'mensagem' => "A edição deve ser maior que zero."
+        ],
+        [
+            'condicao' => !preg_match('/^\d{4}$/', $ano_publicacao),
+            'campo'    => 'ano_publicacao',
+            'mensagem' => "O ano de publicação deve ter 4 dígitos."
+        ],
+        [
+            'condicao' => $ano_publicacao > date('Y'),
+            'campo'    => 'ano_publicacao',
+            'mensagem' => "O ano de publicação não pode ser superior ao ano atual."
+        ],
+        [
+            'condicao' => $valor < 0,
+            'campo'    => 'valor',
+            'mensagem' => "O valor não pode ser negativo."
+        ],
+    ];
+    
+    $erros = [];
+    foreach ($validacoes as $validacao) {
+        if ($validacao['condicao']) {
+            $erros[] = [
+                'campo' => $validacao['campo'],
+                'mensagem' => $validacao['mensagem']
+            ];
+            
+            if ($retornar_primeiro_erro) {
+                return $erros;
+            }
+        }
+    }
+    
+    return $erros;
+}
+
 // Processar formulário
 if ($_POST) {
-    $acao = $_POST['acao'] ?? '';
+    $acao = $_POST['acao'] ?? ''; // Inserir, Editar, Excluir
     
     // Capturar dados do formulário para persistência
     $dados_formulario = [
-        'titulo' => $_POST['titulo'] ?? '',
-        'editora' => $_POST['editora'] ?? '',
-        'edicao' => $_POST['edicao'] ?? '1',
-        'ano_publicacao' => $_POST['ano_publicacao'] ?? '',
-        'valor' => $_POST['valor'] ?? ''
+        'titulo'            => $_POST['titulo'] ?? '',
+        'editora'           => $_POST['editora'] ?? '',
+        'edicao'            => $_POST['edicao'] ?? '1',
+        'ano_publicacao'    => $_POST['ano_publicacao'] ?? '',
+        'valor'             => $_POST['valor'] ?? ''
     ];
     
     try {
+
+        $titulo         = trim($dados_formulario['titulo']);
+        $editora        = trim($dados_formulario['editora']);
+        $edicao         = (int)$dados_formulario['edicao'];
+        $ano_publicacao = trim($dados_formulario['ano_publicacao']);
+        $valor          = str_replace(',', '.', str_replace('.', '', $dados_formulario['valor']));
+
         if ($acao === 'inserir') {
-            $titulo = trim($_POST['titulo']);
-            $editora = trim($_POST['editora']);
-            $edicao = (int)$_POST['edicao'];
-            $ano_publicacao = trim($_POST['ano_publicacao']);
-            $valor = str_replace(',', '.', str_replace('.', '', $_POST['valor']));
+            // Validar dados usando a função reutilizável
+            $erros_validacao = validarDadosLivro($dados_formulario, true);
             
-            // Validações
-            if (empty($titulo)) {
-                $campo_com_erro = 'titulo';
-                throw new Exception("Todos os campos obrigatórios devem ser preenchidos.");
+            if (!empty($erros_validacao)) {
+                $campo_com_erro = $erros_validacao[0]['campo'];
+                throw new Exception($erros_validacao[0]['mensagem']);
             }
-            
-            if (empty($editora)) {
-                $campo_com_erro = 'editora';
-                throw new Exception("Todos os campos obrigatórios devem ser preenchidos.");
-            }
-            
-            if (empty($ano_publicacao)) {
-                $campo_com_erro = 'ano_publicacao';
-                throw new Exception("Todos os campos obrigatórios devem ser preenchidos.");
-            }
-            
-            if ($edicao < 1) {
-                $campo_com_erro = 'edicao';
-                throw new Exception("A edição deve ser maior que zero.");
-            }
-            
-            if (!preg_match('/^\d{4}$/', $ano_publicacao)) {
-                $campo_com_erro = 'ano_publicacao';
-                throw new Exception("O ano de publicação deve ter 4 dígitos.");
-            }
-            
-            if ($ano_publicacao > date('Y')) {
-                $campo_com_erro = 'ano_publicacao';
-                throw new Exception("O ano de publicação não pode ser superior ao ano atual.");
-            }
-            
-            if ($valor < 0) {
-                $campo_com_erro = 'valor';
-                throw new Exception("O valor não pode ser negativo.");
-            }
-            
+        
             $sql = "INSERT INTO livro (Titulo, Editora, Edicao, AnoPublicacao, Valor) VALUES (?, ?, ?, ?, ?)";
             executarQuery($pdo, $sql, [$titulo, $editora, $edicao, $ano_publicacao, $valor]);
             
@@ -79,32 +113,18 @@ if ($_POST) {
             $tipo_mensagem = "success";
             
         } elseif ($acao === 'editar') {
+
             $codl = (int)$_POST['codl'];
-            $titulo = trim($_POST['titulo']);
-            $editora = trim($_POST['editora']);
-            $edicao = (int)$_POST['edicao'];
-            $ano_publicacao = trim($_POST['ano_publicacao']);
-            $valor = str_replace(',', '.', str_replace('.', '', $_POST['valor']));
             
-            // Validações (mesmas do inserir)
-            if (empty($titulo) || empty($editora) || empty($ano_publicacao)) {
-                throw new Exception("Todos os campos obrigatórios devem ser preenchidos.");
-            }
+            // Validar dados usando a função reutilizável
+            $erros_validacao = validarDadosLivro($dados_formulario, false);
             
-            if ($edicao < 1) {
-                throw new Exception("A edição deve ser maior que zero.");
-            }
-            
-            if (!preg_match('/^\d{4}$/', $ano_publicacao)) {
-                throw new Exception("O ano de publicação deve ter 4 dígitos.");
-            }
-            
-            if ($ano_publicacao > date('Y')) {
-                throw new Exception("O ano de publicação não pode ser superior ao ano atual.");
-            }
-            
-            if ($valor < 0) {
-                throw new Exception("O valor não pode ser negativo.");
+            if (!empty($erros_validacao)) {
+                // Concatenar todas as mensagens de erro
+                $mensagens_erro = array_map(function($erro) {
+                    return $erro['mensagem'];
+                }, $erros_validacao);
+                throw new Exception(implode("<br>", $mensagens_erro));
             }
             
             $sql = "UPDATE livro SET Titulo = ?, Editora = ?, Edicao = ?, AnoPublicacao = ?, Valor = ? WHERE Codl = ?";
@@ -114,6 +134,7 @@ if ($_POST) {
             $tipo_mensagem = "success";
             
         } elseif ($acao === 'excluir') {
+            
             $codl = (int)$_POST['codl'];
             
             iniciarTransacao($pdo);
@@ -156,8 +177,8 @@ $livros = $stmt_livros->fetchAll();
 $autores = executarQuery($pdo, "SELECT * FROM autor ORDER BY Nome")->fetchAll();
 $assuntos = executarQuery($pdo, "SELECT * FROM assunto ORDER BY Descricao")->fetchAll();
 
-// Variáveis para edição
 $livro_editando = null;
+
 if (isset($_GET['editar'])) {
     $codl = (int)$_GET['editar'];
     $sql_edit = "SELECT * FROM livro WHERE Codl = ?";
