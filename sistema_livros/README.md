@@ -202,5 +202,3 @@ O sistema já vem com dados de exemplo:
 6. Mostrar responsividade da interface
 
 ---
-
-**Desenvolvido com PHP puro seguindo boas práticas de mercado**

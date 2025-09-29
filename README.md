@@ -1,206 +1,239 @@
-# Sistema de Cadastro de Livros
+# 📚 Sistema de Cadastro de Livros
 
-Sistema web desenvolvido em PHP puro para gerenciamento de livros, autores e assuntos, seguindo o modelo de dados fornecido.
+Um sistema web completo para gerenciamento de livros, autores e assuntos, desenvolvido em PHP com interface moderna e responsiva.
 
-## 🚀 Tecnologias Utilizadas
+## 🚀 Funcionalidades
 
-- **Backend**: PHP 8.0+ (funções nativas)
-- **Banco de Dados**: MySQL 8.0
-- **Frontend**: HTML5, CSS3, JavaScript, Bootstrap 4
-- **Containerização**: Docker
-- **Bibliotecas**: jQuery, Ajax
+### 📖 Gerenciamento de Livros
+- ✅ Cadastro, edição e exclusão de livros
+- ✅ Validação completa de dados (título, editora, edição, ano, valor)
+- ✅ Máscaras de entrada para valores monetários e anos
+- ✅ Relacionamento com autores e assuntos
+- ✅ Listagem com informações detalhadas
 
-## 📋 Funcionalidades
+### 👥 Gerenciamento de Autores
+- ✅ Cadastro, edição e exclusão de autores
+- ✅ Validação de nomes únicos
+- ✅ Verificação de livros associados antes da exclusão
+- ✅ Listagem com contagem de livros por autor
 
-### CRUD Completo
-- ✅ **Livros**: Cadastro com título, editora, edição, ano de publicação e valor (R$)
-- ✅ **Autores**: Cadastro de autores com validação de duplicatas
-- ✅ **Assuntos**: Cadastro de categorias/assuntos para classificação
+### 🏷️ Gerenciamento de Assuntos
+- ✅ Cadastro, edição e exclusão de assuntos
+- ✅ Validação de descrições únicas
+- ✅ Verificação de livros associados antes da exclusão
+- ✅ Listagem com contagem de livros por assunto
 
-### Relacionamentos Many-to-Many
-- ✅ **Livro-Autor**: Um livro pode ter múltiplos autores
-- ✅ **Livro-Assunto**: Um livro pode ter múltiplos assuntos
-- ✅ Interface para gerenciar relacionamentos
+### 🔗 Relacionamentos
+- ✅ Associação de múltiplos autores a um livro
+- ✅ Associação de múltiplos assuntos a um livro
+- ✅ Interface intuitiva para gerenciar relacionamentos
+- ✅ Remoção segura de associações
 
-### Relatórios
-- ✅ **Relatório agrupado por autor** usando view do banco de dados
+### 📊 Relatórios
+- ✅ Relatório detalhado por autor
 - ✅ Estatísticas gerais do acervo
 - ✅ Exportação para CSV
-- ✅ Impressão otimizada
+- ✅ Funcionalidade de impressão
+- ✅ View otimizada para consultas complexas
 
-### Validações e Formatações
-- ✅ Validação de ano de publicação (não pode ser superior ao atual)
-- ✅ Máscara para valores monetários (R$)
-- ✅ Validação de campos obrigatórios
-- ✅ Prevenção de duplicatas
-- ✅ Tratamento de erros específicos
+## 🛠️ Tecnologias Utilizadas
 
-## 🛠️ Instalação e Execução
-
-### Pré-requisitos
-- Docker Desktop instalado
-- PHP 8.0+ (para desenvolvimento local)
-
-### 1. Clonar/Download do Projeto
-```bash
-# Navegar para a pasta do projeto
-cd "LayoutBase"
-```
-
-### 2. Executar com Docker
-```bash
-# Iniciar o banco MySQL
-docker-compose up -d
-
-# Verificar se o container está rodando
-docker ps
-```
-
-### 3. Acessar o Sistema
-```bash
-# Usar servidor PHP integrado (recomendado para desenvolvimento)
-php -S localhost:8000
-
-# Ou usar servidor web local (Apache/Nginx)
-# Configurar virtual host apontando para a pasta LayoutBase
-```
-
-### 4. Acessar no Navegador
-- **URL**: http://localhost:8000
-- **Banco**: MySQL rodando na porta 3306
-
-## 🗄️ Estrutura do Banco de Dados
-
-### Tabelas Principais
-- `livro`: Livros com campo valor (R$) adicionado
-- `autor`: Autores do sistema
-- `assunto`: Categorias/assuntos
-
-### Tabelas de Relacionamento
-- `livro_autor`: Relacionamento many-to-many entre livros e autores
-- `livro_assunto`: Relacionamento many-to-many entre livros e assuntos
-
-### View para Relatórios
-- `vw_relatorio_livros_por_autor`: View que agrupa dados por autor para relatórios
+- **Backend**: PHP 8.1
+- **Banco de Dados**: MySQL 8.0
+- **Frontend**: Bootstrap 5, Font Awesome
+- **Servidor Web**: Apache 2.4
+- **Containerização**: Docker & Docker Compose
+- **URLs**: Amigáveis (sem extensão .php)
 
 ## 📁 Estrutura do Projeto
 
 ```
-LayoutBase/
-├── index.php                 # Página inicial
-├── livros.php               # CRUD de livros
-├── autores.php              # CRUD de autores
-├── assuntos.php             # CRUD de assuntos
-├── relacionamentos.php      # Gerenciar relacionamentos
-├── relatorio.php            # Relatórios agrupados por autor
-├── conn.php                 # Conexão com banco de dados
-├── docker-compose.yml       # Configuração Docker
-├── database/
-│   └── create_database.sql  # Script de criação do banco
-└── README.md                # Este arquivo
+sistema_livros/
+├── 📄 index.php              # Página inicial
+├── 📄 livros.php             # Gerenciamento de livros
+├── 📄 autores.php            # Gerenciamento de autores
+├── 📄 assuntos.php           # Gerenciamento de assuntos
+├── 📄 relacionamentos.php    # Gerenciamento de relacionamentos
+├── 📄 relatorio.php          # Relatórios e estatísticas
+├── 📄 conn.php               # Conexão com banco de dados
+├── 📄 menu.php               # Menu de navegação
+├── 📄 footer.php             # Rodapé
+├── 📄 functions.js           # Funções JavaScript comuns
+├── 📄 teste-conexao.php      # Teste de conexão com banco
+├── 📄 .htaccess              # Configuração Apache
+├── 📄 docker-compose.yml     # Configuração Docker
+├── 📄 apache-config.conf     # Configuração adicional Apache
+├── 📄 php.ini                # Configurações PHP
+├── 📁 css/
+│   ├── layout.css            # Estilos de layout global
+│   └── sb-admin-2.css        # Tema SB Admin 2
+├── 📁 database/
+│   └── create_database.sql   # Script de criação do banco
+└── 📁 vendor/                # Dependências (Bootstrap, Font Awesome, jQuery)
 ```
 
-## 🔧 Configurações
+## 🐳 Instalação com Docker
 
-### Banco de Dados (conn.php)
-```php
-$host = 'localhost';
-$port = '3306';
-$dbname = 'sistema_livros';
-$username = 'usuario';
-$password = 'senha123';
-```
+### Pré-requisitos
+- Docker
+- Docker Compose
 
-### Docker (docker-compose.yml)
-- **MySQL 8.0** na porta 3306
-- **Usuário**: usuario
-- **Senha**: senha123
-- **Banco**: sistema_livros
+### Passos de Instalação
 
-## 📊 Relatórios
+1. **Clone o repositório**:
+   ```bash
+   git clone <url-do-repositorio>
+   cd sistema_livros
+   ```
 
-### Relatório por Autor
-- Agrupa livros por autor
-- Mostra estatísticas por autor
-- Calcula valores totais
-- Exporta para CSV
-- Otimizado para impressão
+2. **Inicie os containers**:
+   ```bash
+   docker-compose up -d
+   ```
 
-### Estatísticas Gerais
-- Total de autores
-- Total de livros
-- Valor total do acervo
-- Valor médio por livro
+3. **Aguarde a instalação** (primeira execução pode levar alguns minutos)
 
-## 🎯 Diferenciais Implementados
+4. **Teste a conexão**:
+   - Acesse: http://localhost:8000/teste-conexao.php
 
-### Boas Práticas
-- ✅ Uso de PDO com prepared statements
-- ✅ Tratamento específico de erros (não genérico)
-- ✅ Validações robustas
-- ✅ Transações para operações críticas
-- ✅ Índices no banco para performance
+5. **Acesse o sistema**:
+   - URL: http://localhost:8000
 
-### Interface
-- ✅ Bootstrap para responsividade
-- ✅ Máscaras de formatação
-- ✅ Confirmações para exclusões
+### URLs Disponíveis
+
+- 🏠 **Início**: http://localhost:8000
+- 📚 **Livros**: http://localhost:8000/livros
+- 👥 **Autores**: http://localhost:8000/autores
+- 🏷️ **Assuntos**: http://localhost:8000/assuntos
+- 🔗 **Relacionamentos**: http://localhost:8000/relacionamentos
+- 📊 **Relatórios**: http://localhost:8000/relatorio
+
+## 🗄️ Banco de Dados
+
+### Estrutura das Tabelas
+
+- **`livro`**: Informações dos livros (título, editora, edição, ano, valor)
+- **`autor`**: Informações dos autores (nome)
+- **`assunto`**: Informações dos assuntos (descrição)
+- **`livro_autor`**: Relacionamento muitos-para-muitos entre livros e autores
+- **`livro_assunto`**: Relacionamento muitos-para-muitos entre livros e assuntos
+
+### View de Relatório
+
+- **`vw_relatorio_livros_por_autor`**: View otimizada para relatórios com agrupamento por autor
+
+### Dados de Exemplo
+
+O sistema inclui dados de exemplo com autores brasileiros clássicos e seus livros.
+
+## ⚙️ Configurações
+
+### Docker Compose
+
+O sistema utiliza dois containers:
+- **Web**: Apache + PHP 8.1 (porta 8000)
+- **MySQL**: MySQL 8.0 (porta 3306)
+
+### Configurações Automáticas
+
+- **Detecção de Ambiente**: Automática (Docker vs Local)
+- **URLs Amigáveis**: Configuradas via .htaccess
+- **Validações**: Centralizadas e reutilizáveis
+- **Segurança**: Proteção contra XSS e SQL Injection
+
+## 🔧 Funcionalidades Técnicas
+
+### Validações Centralizadas
+
+- **`validarDadosLivro()`**: Validação completa de livros
+- **`validarDadosAutor()`**: Validação de autores
+- **`validarDadosAssunto()`**: Validação de assuntos
+
+### Recursos de UX/UI
+
+- ✅ Interface responsiva
 - ✅ Mensagens de feedback
-- ✅ Interface intuitiva
+- ✅ Validação em tempo real
+- ✅ Máscaras de entrada
+- ✅ Confirmação de exclusão
+- ✅ Auto-foco em campos com erro
+- ✅ Footer sempre no rodapé
 
-### Banco de Dados
-- ✅ View para relatórios
-- ✅ Índices para performance
-- ✅ Foreign keys com CASCADE
-- ✅ Dados de exemplo para teste
+### Segurança
 
-## 🧪 Dados de Exemplo
+- ✅ Prepared Statements (PDO)
+- ✅ Escape de HTML (htmlspecialchars)
+- ✅ Validação de entrada
+- ✅ Proteção contra SQL Injection
+- ✅ Proteção contra XSS
 
-O sistema já vem com dados de exemplo:
-- 5 autores brasileiros famosos
-- 8 categorias de assuntos
-- 5 livros clássicos da literatura brasileira
-- Relacionamentos pré-configurados
+## 🚨 Resolução de Problemas
 
-## 🔍 Validações Implementadas
+### Erro de Conexão com Banco
 
-### Livros
-- Ano não pode ser superior ao atual
-- Edição deve ser maior que zero
-- Valor não pode ser negativo
-- Campos obrigatórios
+```bash
+# Verificar containers
+docker-compose ps
 
-### Autores/Assuntos
-- Prevenção de duplicatas
-- Limite de caracteres
-- Verificação de relacionamentos antes da exclusão
+# Verificar logs
+docker logs sistema_livros_web
+docker logs sistema_livros_mysql
 
-## 📱 Responsividade
+# Reiniciar containers
+docker-compose restart
+```
 
-- Interface adaptável para desktop, tablet e mobile
-- Bootstrap 4 para layout responsivo
-- Componentes otimizados para diferentes telas
+### Erro "could not find driver"
 
-## 🚀 Para Apresentação
+```bash
+# Reinstalar containers (instala drivers MySQL)
+docker-compose down
+docker-compose up -d
+```
 
-### Pontos de Destaque
-1. **Modelo seguido integralmente** com campo valor adicionado
-2. **Relatório agrupado por autor** usando view do banco
-3. **Tratamento de erros específicos** (não genéricos)
-4. **Validações robustas** incluindo ano atual
-5. **Formatação adequada** de valores monetários
-6. **Interface profissional** com Bootstrap
-7. **Docker para facilidade** de instalação
-8. **Código limpo** com funções PHP nativas
+### URLs não funcionam
 
-### Demonstração Sugerida
-1. Mostrar estrutura do banco e view
-2. Demonstrar CRUD completo
-3. Mostrar relacionamentos many-to-many
-4. Exibir relatório agrupado por autor
-5. Testar validações e formatações
-6. Mostrar responsividade da interface
+- Verifique se o mod_rewrite está habilitado
+- Confirme que o .htaccess está presente
+- Teste acessando diretamente com .php
+
+## 📈 Melhorias Implementadas
+
+### Refatoração de Código
+- ✅ Eliminação de código duplicado
+- ✅ Funções de validação centralizadas
+- ✅ Compatibilidade com PHP 8.1+
+- ✅ Tratamento de valores null
+
+### Docker e Infraestrutura
+- ✅ Containerização completa
+- ✅ URLs sem extensão
+- ✅ Configuração automática
+- ✅ Drivers MySQL incluídos
+
+### Interface e UX
+- ✅ Layout responsivo
+- ✅ Footer fixo
+- ✅ Mensagens de feedback
+- ✅ Validação em tempo real
+
+## 🎯 Próximas Melhorias
+
+- [ ] Sistema de autenticação
+- [ ] Backup automático do banco
+- [ ] API REST
+- [ ] Relatórios em PDF
+- [ ] Busca avançada
+- [ ] Importação em lote
+
+## 📝 Licença
+
+Este projeto foi desenvolvido como teste técnico e está disponível para fins educacionais.
+
+## 👨‍💻 Desenvolvido por
+
+Sistema desenvolvido com foco em boas práticas de desenvolvimento, segurança e usabilidade.
 
 ---
 
-**Desenvolvido com PHP puro seguindo boas práticas de mercado**
+**🎉 Sistema totalmente funcional e pronto para uso!**
