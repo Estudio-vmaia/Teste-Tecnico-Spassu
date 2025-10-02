@@ -243,7 +243,7 @@ if (isset($_GET['editar'])) {
                                                         </a>
                                                         <?php if ($autor['TotalLivros'] == 0): ?>
                                                             <button type="button" class="btn btn-outline-danger" 
-                                                                    onclick="confirmarExclusao(<?= $autor['CodAu'] ?>, '<?= htmlspecialchars($autor['Nome'] ?? '') ?>')" 
+                                                                    onclick="confirmarExclusao(<?= $autor['CodAu'] ?>, '<?= addslashes($autor['Nome'] ?? '') ?>')" 
                                                                     title="Excluir">
                                                                 <i class="fas fa-trash"></i>
                                                             </button>
@@ -297,10 +297,25 @@ if (isset($_GET['editar'])) {
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script>
+        let modalExcluir;
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            modalExcluir = new bootstrap.Modal(document.getElementById('modalExcluir'));
+            
+            // Adicionar event listeners para fechar o modal
+            document.querySelector('#modalExcluir .btn-close').addEventListener('click', function() {
+                modalExcluir.hide();
+            });
+            
+            document.querySelector('#modalExcluir .btn-secondary').addEventListener('click', function() {
+                modalExcluir.hide();
+            });
+        });
+        
         function confirmarExclusao(codau, nome) {
             document.getElementById('codauExcluir').value = codau;
             document.getElementById('nomeAutor').textContent = nome;
-            new bootstrap.Modal(document.getElementById('modalExcluir')).show();
+            modalExcluir.show();
         }
     </script>
 </body>

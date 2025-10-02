@@ -78,6 +78,7 @@ function validarDadosLivro($dados, $retornar_primeiro_erro = false) {
 
 // Processar formulário
 if ($_POST) {
+    
     $acao = $_POST['acao'] ?? ''; // Inserir, Editar, Excluir
     
     // Capturar dados do formulário para persistência
@@ -250,7 +251,9 @@ if (isset($_GET['editar'])) {
                     </div>
                     <div class="card-body">
                         <form method="POST">
+                            
                             <input type="hidden" name="acao" value="<?= $livro_editando ? 'editar' : 'inserir' ?>">
+
                             <?php if ($livro_editando): ?>
                                 <input type="hidden" name="codl" value="<?= $livro_editando['Codl'] ?>">
                             <?php endif; ?>
@@ -353,7 +356,7 @@ if (isset($_GET['editar'])) {
                                                             <i class="fas fa-edit"></i>
                                                         </a>
                                                         <button type="button" class="btn btn-outline-danger" 
-                                                                onclick="confirmarExclusao(<?= $livro['Codl'] ?>, '<?= htmlspecialchars($livro['Titulo'] ?? '') ?>')" 
+                                                                onclick="confirmarExclusao(<?= $livro['Codl'] ?>, '<?= addslashes($livro['Titulo'] ?? '') ?>')" 
                                                                 title="Excluir">
                                                             <i class="fas fa-trash"></i>
                                                         </button>
@@ -366,30 +369,6 @@ if (isset($_GET['editar'])) {
                             </div>
                         <?php endif; ?>
                     </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal de Confirmação de Exclusão -->
-    <div class="modal fade" id="modalExcluir" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Confirmar Exclusão</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <p>Tem certeza que deseja excluir o livro <strong id="tituloLivro"></strong>?</p>
-                    <p class="text-danger"><small>Esta ação não pode ser desfeita e removerá todos os relacionamentos.</small></p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <form method="POST" style="display: inline;">
-                        <input type="hidden" name="acao" value="excluir">
-                        <input type="hidden" name="codl" id="codlExcluir">
-                        <button type="submit" class="btn btn-danger">Excluir</button>
-                    </form>
                 </div>
             </div>
         </div>
@@ -441,10 +420,25 @@ if (isset($_GET['editar'])) {
             e.target.value = e.target.value.replace(/\D/g, '').substring(0, 4);
         });
 
+        let modalExcluir;
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            modalExcluir = new bootstrap.Modal(document.getElementById('modalExcluir'));
+            
+            // Adicionar event listeners para fechar o modal
+            document.querySelector('#modalExcluir .btn-close').addEventListener('click', function() {
+                modalExcluir.hide();
+            });
+            
+            document.querySelector('#modalExcluir .btn-secondary').addEventListener('click', function() {
+                modalExcluir.hide();
+            });
+        });
+        
         function confirmarExclusao(codl, titulo) {
             document.getElementById('codlExcluir').value = codl;
             document.getElementById('tituloLivro').textContent = titulo;
-            new bootstrap.Modal(document.getElementById('modalExcluir')).show();
+            modalExcluir.show();
         }
     </script>
 </body>

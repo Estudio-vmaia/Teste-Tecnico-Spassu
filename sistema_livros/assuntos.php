@@ -243,7 +243,7 @@ if (isset($_GET['editar'])) {
                                                         </a>
                                                         <?php if ($assunto['TotalLivros'] == 0): ?>
                                                             <button type="button" class="btn btn-outline-danger" 
-                                                                    onclick="confirmarExclusao(<?= $assunto['codAs'] ?>, '<?= htmlspecialchars($assunto['Descricao'] ?? '') ?>')" 
+                                                                    onclick="confirmarExclusao(<?= $assunto['codAs'] ?>, '<?= addslashes($assunto['Descricao'] ?? '') ?>')" 
                                                                     title="Excluir">
                                                                 <i class="fas fa-trash"></i>
                                                             </button>
@@ -297,10 +297,25 @@ if (isset($_GET['editar'])) {
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script>
+        let modalExcluir;
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            modalExcluir = new bootstrap.Modal(document.getElementById('modalExcluir'));
+            
+            // Adicionar event listeners para fechar o modal
+            document.querySelector('#modalExcluir .btn-close').addEventListener('click', function() {
+                modalExcluir.hide();
+            });
+            
+            document.querySelector('#modalExcluir .btn-secondary').addEventListener('click', function() {
+                modalExcluir.hide();
+            });
+        });
+        
         function confirmarExclusao(codas, descricao) {
             document.getElementById('codasExcluir').value = codas;
             document.getElementById('descricaoAssunto').textContent = descricao;
-            new bootstrap.Modal(document.getElementById('modalExcluir')).show();
+            modalExcluir.show();
         }
     </script>
 </body>

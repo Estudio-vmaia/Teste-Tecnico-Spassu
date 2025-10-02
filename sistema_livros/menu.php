@@ -9,7 +9,7 @@
                 <i class="fas fa-home"></i> Início
             </a>
             <a class="nav-link" href="livros">
-                    <i class="fas fa-book"></i> Livros
+                <i class="fas fa-book"></i> Livros
             </a>
             <a class="nav-link" href="autores">
                 <i class="fas fa-user-edit"></i> Autores
